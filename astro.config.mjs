@@ -32,5 +32,11 @@ export default defineConfig({
       __BUILD_HASH__: JSON.stringify(hash),
       __BUILD_TIME__: JSON.stringify(time),
     },
+    build: {
+      // lightningcss 会把 animation-timeline 折进 animation 简写，
+      // 而 Chrome 不解析简写里的 scroll()/view() → 进度条动画被丢弃。
+      // esbuild 不折叠，保持长写法。
+      cssMinify: 'esbuild',
+    },
   },
 });

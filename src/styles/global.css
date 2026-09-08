@@ -769,6 +769,12 @@ mark.pen {
     background-size: 100% 62%;
   }
 }
+/* reduce 下划线必须可见（SDA 规则被 no-preference 守卫禁用，会退回 0%） */
+@media (prefers-reduced-motion: reduce) {
+  mark.pen {
+    background-size: 100% 62%;
+  }
+}
 
 /* ——————————————— 跨文档 View Transitions ——————————————— */
 @view-transition {
