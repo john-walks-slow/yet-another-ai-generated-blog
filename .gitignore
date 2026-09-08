@@ -28,3 +28,6 @@ pnpm-debug.log*
 
 # local agent state
 .mnemon/
+
+# playwright-cli snapshots
+.playwright-cli/
