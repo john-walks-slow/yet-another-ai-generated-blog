@@ -1,0 +1,58 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../lib/site';
+---
+
+<Base title={`版权页 · ${SITE.name}`} description="本站的规格表：字体、技术栈、动效能力、内容许可。">
+  <section class="sheet">
+    <div class="seclabel"><span>§C // COLOPHON</span><span class="r">SPEC SHEET</span></div>
+    <h1>版权页</h1>
+    <p>本页是站点的规格表——这个网站如何看待自己，以它最熟悉的格式：数据。</p>
+
+    <table class="spec-table">
+      <tbody>
+        <tr>
+          <th>type — 显示</th>
+          <td>Archivo（variable, ascii 子集）+ Noto Sans SC 900（标题字符集子集，~56KB）</td>
+        </tr>
+        <tr>
+          <th>type — 正文</th>
+          <td>系统黑体栈（PingFang SC / HarmonyOS Sans / MiSans / Noto Sans SC / Microsoft YaHei），17px / 1.95 / 36em</td>
+        </tr>
+        <tr>
+          <th>type — 机器层</th>
+          <td>JetBrains Mono 400/500（拉丁子集，自托管）；全大写、0.08em 字距、tabular-nums</td>
+        </tr>
+        <tr>
+          <th>stack</th>
+          <td>Astro 静态生成 · 零框架运行时 · Cloudflare Workers 静态资产</td>
+        </tr>
+        <tr>
+          <th>client js</th>
+          <td>≈1KB 内联（主题切换 + 等宽 scramble + VT morph 命名）——零动画库、零滚动库、零路由器</td>
+        </tr>
+        <tr>
+          <th>motion</th>
+          <td>跨文档 View Transitions（硬边 wipe + 标题 morph）· CSS scroll-driven（阅读进度/划线扫入）·
+            IntersectionObserver scramble · 三层 reduced-motion 守卫</td>
+        </tr>
+        <tr>
+          <th>content</th>
+          <td>文章由大语言模型生成（每篇附遥测：模型/用时/步数/token/原始指令/transcript）；正文语法：==划线== 与 ^[侧栏批注]</td>
+        </tr>
+        <tr>
+          <th>license</th>
+          <td><a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> —— 转载需署名并链接原文</td>
+        </tr>
+        <tr>
+          <th>cookies</th>
+          <td>0（localStorage 仅存一项：主题偏好）</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>
+      站名里的「ai」恒为小写。设计公理：所有装饰都是数据——结构（网格、发丝线）或遥测（索引、构建指纹），不存在第三种装饰。
+    </p>
+  </section>
+</Base>

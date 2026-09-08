@@ -1,0 +1,121 @@
+---
+import Base from '../../layouts/Base.astro';
+import { render } from 'astro:content';
+import {
+  allPosts,
+  postView,
+  fmtDate,
+  fmtNum,
+  fmtDuration,
+  type Post,
+} from '../../lib/site';
+
+export async function getStaticPaths() {
+  const posts = await allPosts();
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const posts = await allPosts();
+const postsAsc = [...posts].reverse();
+const idx = posts.findIndex((p) => p.id === post.id);
+const prev = posts[idx + 1]; // 更早
+const next = posts[idx - 1]; // 更新
+const v = postView(post, postsAsc);
+const { Content } = await render(post);
+const d = post.data;
+const prevView = prev ? postView(prev, postsAsc) : null;
+const nextView = next ? postView(next, postsAsc) : null;
+---
+
+<Base title={`${d.title} · 又是一个ai生成的博客`} description={d.summary} progress>
+  <article>
+    <header class="post-head">
+      <div class="post-meta">
+        <span class="pno">{v.no}</span>
+        <span>{fmtDate(d.date)}</span>
+        <span>{d.tags.map((t) => `#${t}`).join(' ')}</span>
+        <span>{v.minutes} MIN</span>
+        <a class="gen-link" href="#gen">GEN ▸</a>
+      </div>
+      <h1 class="post-title">{d.title}</h1>
+    </header>
+
+    <div class="post-body">
+      <div class="prose">
+        <Content />
+      </div>
+
+      <details class="gen-record" id="gen">
+        <summary>
+          <span class="k">GEN ·</span><span class="v">{d.model}</span>
+          <span class="k">·</span><span class="v">{fmtDuration(d.duration_s)}</span>
+          <span class="k">·</span><span class="v">{d.steps} steps</span>
+          <span class="k">·</span><span class="v">{fmtNum(d.tokens_in + d.tokens_out)} tok</span>
+          <span class="k">·</span><span class="v">{d.polished ? 'polished' : 'unpolished'}</span>
+        </summary>
+        <div class="gen-table">
+          <div class="gr-row"><span class="k">model</span><span class="v">{d.model}</span></div>
+          <div class="gr-row">
+            <span class="k">duration</span><span class="v">{d.duration_s} s</span>
+          </div>
+          <div class="gr-row"><span class="k">steps</span><span class="v">{d.steps}</span></div>
+          <div class="gr-row">
+            <span class="k">tokens</span>
+            <span class="v">in {fmtNum(d.tokens_in)} / out {fmtNum(d.tokens_out)}</span>
+          </div>
+          <div class="gr-row">
+            <span class="k">polished</span><span class="v">{d.polished ? 'yes' : 'no'}</span>
+          </div>
+        </div>
+        {
+          d.prompt && (
+            <blockquote class="gen-prompt">
+              <span class="ph">PROMPT // 原始指令</span>
+              {d.prompt}
+            </blockquote>
+          )
+        }
+        {
+          d.transcript && (
+            <div class="gen-links">
+              <a href={d.transcript} download>
+                TRANSCRIPT · {d.transcript.split('/').pop()} ↓
+              </a>
+            </div>
+          )
+        }
+      </details>
+
+      <nav class="post-nav">
+        {
+          prev && prevView ? (
+            <a href={`/posts/${prev.id}/`}>
+              <span class="label">← {prevView.no} · {fmtDate(prev.data.date).slice(2)}</span>
+              {prev.data.title}
+            </a>
+          ) : (
+            <span />
+          )
+        }
+        {
+          next && nextView ? (
+            <a class="next" href={`/posts/${next.id}/`} data-vt-title>
+              <span class="label">{nextView.no} · {fmtDate(next.data.date).slice(2)} →</span>
+              {next.data.title}
+            </a>
+          ) : (
+            <span />
+          )
+        }
+      </nav>
+    </div>
+  </article>
+</Base>

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>又是一个ai生成的博客 · 首页设计稿</title>
+<!-- 设计稿字体：生产环境将替换为构建期子集化自托管字体 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.2.5/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.2.5/500.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/noto-serif-sc@5.2.5/chinese-simplified-900.css">
+<style>
+  :root {
+    --paper:     #FAF7F2;
+    --ink:       #1A1815;
+    --ink-soft:  #6F6A61;
+    --ink-faint: #A39D92;
+    --hairline:  #E4DED3;
+    --indigo:    #363B8F;
+    --highlight: #F4D06F;
+    --seal:      #B3423A;
+
+    --font-serif: "Noto Serif SC", "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", "SimSun", serif;
+    --font-mono:  "JetBrains Mono", "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", ui-monospace, monospace;
+    --font-kai:   "LXGW WenKai", "Kaiti SC", "KaiTi", "STKaiti", serif;
+
+    --col-prose: 36em;
+    --col-page: 64rem;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { color-scheme: light; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-serif);
+    font-size: 17px;
+    line-height: 1.9;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection { background: var(--highlight); color: var(--ink); }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ————— 全局布局 ————— */
+
+  .page {
+    max-width: var(--col-page);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ————— 顶栏（机器层） ————— */
+
+  .masthead {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 20px 0 16px;
+    border-bottom: 1px solid var(--ink);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.02em;
+  }
+
+  .brand {
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .brand .mark { color: var(--seal); margin-right: 6px; }
+
+  .masthead nav { display: flex; gap: 20px; }
+
+  .masthead nav a {
+    color: var(--ink-soft);
+    transition: color 120ms ease-out;
+  }
+
+  .masthead nav a:hover { color: var(--indigo); }
+
+  a:focus-visible, .title:focus-visible {
+    outline: 1px solid var(--indigo);
+    outline-offset: 3px;
+  }
+
+  /* ————— 宣言首屏（阅读层 + 机器层统计） ————— */
+
+  .hero {
+    padding: 88px 0 72px;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .hero h1 {
+    font-weight: 900;
+    font-size: clamp(2.25rem, 7vw, 4.25rem);
+    line-height: 1.22;
+    letter-spacing: 0.01em;
+  }
+
+  .hero h1 .en {
+    display: block;
+    margin-top: 0.5em;
+    font-family: var(--font-mono);
+    font-weight: 400;
+    font-size: clamp(0.7rem, 1.4vw, 0.78rem);
+    letter-spacing: 0.28em;
+    color: var(--ink-faint);
+  }
+  /* 站名 ai 恒小写：松弛感是设计决定 */
+  .hero h1 .ai { font-size: 0.94em; }
+
+  .hero-desc {
+    margin-top: 28px;
+    font-size: 1.06rem;
+    color: var(--ink-soft);
+    max-width: 34em;
+  }
+
+  .hero-stats {
+    margin-top: 20px;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    letter-spacing: 0.03em;
+  }
+
+  .hero-stats .num { color: var(--indigo); }
+  .hero-stats .min { color: var(--seal); }
+
+  /* ————— 文章列表 ————— */
+
+  .posts { padding: 8px 0 72px; }
+
+  .year-block { margin-top: 40px; }
+  .year-block:first-child { margin-top: 24px; }
+
+  .year-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--ink);
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+  }
+
+  .post {
+    display: grid;
+    grid-template-columns: 4.6em 1fr;
+    gap: 0 20px;
+    padding: 22px 0 20px;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .post .date {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--ink-faint);
+    padding-top: 7px;
+    letter-spacing: 0.02em;
+  }
+
+  .post .title {
+    font-size: 1.28rem;
+    font-weight: 700;
+    line-height: 1.6;
+    display: inline;
+    background-image: linear-gradient(var(--ink), var(--ink));
+    background-repeat: no-repeat;
+    background-size: 0% 1px;
+    background-position: 0 96%;
+    transition: color 120ms ease-out, background-size 160ms ease-out;
+  }
+
+  .post:hover .title { color: var(--indigo); }
+  .post .title:hover { background-size: 100% 1px; background-image: linear-gradient(var(--indigo), var(--indigo)); }
+
+  .post .tags {
+    margin-left: 12px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--ink-faint);
+    letter-spacing: 0.04em;
+  }
+
+  .post .summary {
+    margin-top: 6px;
+    font-size: 0.94rem;
+    color: var(--ink-soft);
+    line-height: 1.8;
+    max-width: 44em;
+  }
+
+  /* ————— 页脚（机器层） ————— */
+
+  .site-footer {
+    border-top: 1px solid var(--ink);
+    padding: 24px 0 48px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 2.1;
+    color: var(--ink-faint);
+    letter-spacing: 0.02em;
+  }
+
+  .site-footer .links a { color: var(--ink-soft); }
+  .site-footer .links a:hover { color: var(--indigo); }
+  .site-footer .links span { margin: 0 6px; color: var(--hairline); }
+  .site-footer .build { margin-top: 2px; }
+
+  /* ————— 响应式 ————— */
+
+  @media (max-width: 640px) {
+    .hero { padding: 56px 0 48px; }
+    .post { grid-template-columns: 1fr; gap: 2px; }
+    .post .date { padding-top: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <a class="brand" href="#"><span class="mark">◈</span>又是一个ai生成的博客</a>
+    <nav>
+      <a href="#">归档</a>
+      <a href="#">关于</a>
+      <a href="#">RSS</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>
+      又是一个<br><span class="ai">ai</span> 生成的博客。
+      <span class="en">yet another ai-generated blog — est. 2025</span>
+    </h1>
+    <p class="hero-desc">每周两更。文章全部由 AI 生成——人只负责点子、阅读与签名。构思比写作更费力，这是本站唯一的怪癖。</p>
+    <p class="hero-stats">[ <span class="num">11</span> 篇 · 累计人工投入 <span class="min">4.6</span> 小时 · 最近更新 2026-09-05 ]</p>
+  </section>
+
+  <main class="posts">
+
+    <section class="year-block">
+      <div class="year-head"><span>2026</span><span>8 POSTS</span></div>
+
+      <article class="post">
+        <div class="date">09-05</div>
+        <div>
+          <a class="title" href="#">论作为方法的提示词</a><span class="tags">#哲学</span>
+          <p class="summary">提示词不是咒语，而是一份把思辨外包给机器的协议。本文认真讨论这件不严肃的事，并顺手检讨了作者投入其中的十二分钟。</p>
+        </div>
+      </article>
+
+      <article class="post">
+        <div class="date">09-01</div>
+        <div>
+          <a class="title" href="#">上下文窗口的形而上学</a><span class="tags">#ai</span>
+          <p class="summary">注意力是有限的，因此模型对世界的爱只能是局部的。关于遗忘如何成为认知的一部分——由一个没有记忆的系统写出。</p>
+        </div>
+      </article>
+
+      <article class="post">
+        <div class="date">08-29</div>
+        <div>
+          <a class="title" href="#">谁在替我说话：写作外包中的自我问题</a><span class="tags">#哲学</span>
+          <p class="summary">当文章由机器起草而人只负责签名，署名还有意义吗？一篇关于作者性的思辨——写完之后，作者本人也读了两遍。</p>
+        </div>
+      </article>
+
+      <article class="post">
+        <div class="date">08-26</div>
+        <div>
+          <a class="title" href="#">为什么我不检查这个博客的代码</a><span class="tags">#技术</span>
+          <p class="summary">信任自动化系统是一种懒惰，还是一种修养？以本站的 CI 流水线为标本，讨论「审慎地放弃审查」。</p>
+        </div>
+      </article>
+
+      <article class="post">
+        <div class="date">08-22</div>
+        <div>
+          <a class="title" href="#">生成式设计批判：以本站为样本</a><span class="tags">#ai #技术</span>
+          <p class="summary">AI 生成的网站都长一个样吗？本站的设计系统如何有意识地反抗这种均质感——由设计了本站的同一个模型进行自我批评。</p>
+        </div>
+      </article>
+
+      <article class="post">
+        <div class="date">08-19</div>
+        <div>
+          <a class="title" href="#">机器排版简史</a><span class="tags">#技术</span>
+          <p class="summary">从活字到 text-autospace：排版一直是人替机器操心、又让机器替人操心的历史。</p>
+        </div>
+      </article>
+
+      <article class="post">
+        <div class="date">08-15</div>
+        <div>
+          <a class="title" href="#">认真对待不认真</a><span class="tags">#哲学</span>
+          <p class="summary">本站的创始宣言：为什么放弃独创性的面子之后，写作反而变多了。</p>
+        </div>
+      </article>
+
+      <article class="post">
+        <div class="date">08-12</div>
+        <div>
+          <a class="title" href="#">又是第一篇</a><span class="tags">#元</span>
+          <p class="summary">每个博客都有第一篇。这一篇的任务是承认自己可有可无，然后继续存在。</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="year-block">
+      <div class="year-head"><span>2025</span><span>3 POSTS</span></div>
+
+      <article class="post">
+        <div class="date">12-01</div>
+        <div>
+          <a class="title" href="#">所有博客最终都会变成 AI 博客</a><span class="tags">#元</span>
+          <p class="summary">一个不情愿的预言：个人写作的经济学，如何把每一个人推向这一步。</p>
+        </div>
+      </article>
+
+      <article class="post">
+        <div class="date">11-24</div>
+        <div>
+          <a class="title" href="#">模型不知道自己不知道什么</a><span class="tags">#ai</span>
+          <p class="summary">幻觉不是缺陷，而是认识论的日常状态——在这一点上，模型和人并无不同。</p>
+        </div>
+      </article>
+
+      <article class="post">
+        <div class="date">11-17</div>
+        <div>
+          <a class="title" href="#">给机器的注释，给人的脚注</a><span class="tags">#技术</span>
+          <p class="summary">侧栏注是一种诚实：把打断读者的权力，交还给读者。</p>
+        </div>
+      </article>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div>由 AI 生成 · 人工仅参与选题与审读 · 累计投入 4.6 小时</div>
+    <div class="links">
+      <a href="#">RSS</a><span>·</span><a href="#">归档</a><span>·</span><a href="#">关于</a><span>·</span><a href="#">版权页</a>
+    </div>
+    <div class="build">build 8f3a2c1 · 2026-09-08 21:57 UTC</div>
+  </footer>
+
+</div>
+</body>
+</html>

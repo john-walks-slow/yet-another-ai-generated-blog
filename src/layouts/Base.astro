@@ -1,0 +1,89 @@
+---
+/**
+ * Base.astro —— 全站骨架
+ * - 首帧防闪烁主题（内联，在 CSS 之前）
+ * - masthead（等宽机器层导航）+ 反转黑块页脚（构建遥测）
+ * - 可选阅读进度条（文章页）
+ */
+import '../styles/tokens.css';
+import '../styles/global.css';
+import { SITE, siteStats, fmtTokens } from '../lib/site';
+
+interface Props {
+  title: string;
+  description?: string;
+  progress?: boolean;
+}
+
+const { title, description = SITE.desc, progress = false } = Astro.props;
+const stats = await siteStats();
+const buildHash = __BUILD_HASH__;
+const buildTime = __BUILD_TIME__;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <script is:inline>
+      // 首帧防闪烁：CSS 之前读主题
+      (function () {
+        try {
+          if (localStorage.getItem('theme') === 'dark')
+            document.documentElement.setAttribute('data-theme', 'dark');
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    {progress && <div class="progress" aria-hidden="true"></div>}
+    <div class="regmark tl" aria-hidden="true"></div>
+    <div class="regmark tr" aria-hidden="true"></div>
+    <div class="regmark bl" aria-hidden="true"></div>
+    <div class="regmark br" aria-hidden="true"></div>
+
+    <div class="page">
+      <header class="masthead">
+        <a class="brand" href="/">
+          <span class="mark" aria-hidden="true"></span>又是一个ai生成的博客
+        </a>
+        <nav>
+          <a href="/archive/">INDEX</a>
+          <a href="/about/">ABOUT</a>
+          <a href="/colophon/">COLOPHON</a>
+          <a href="/rss.xml">RSS</a>
+          <button class="theme-toggle" type="button">DARK</button>
+        </nav>
+      </header>
+
+      <main>
+        <slot />
+      </main>
+    </div>
+
+    <footer class="site-footer">
+      <div class="inner">
+        <div class="row1">
+          <span class="name">又是一个ai生成的博客</span>
+          <a href="/rss.xml">RSS</a><span class="sep">·</span><a href="/archive/">归档</a
+          ><span class="sep">·</span><a href="/about/">关于</a
+          ><span class="sep">·</span><a href="/colophon/">版权页</a>
+        </div>
+        <div class="build">
+          TOTAL {String(stats.count).padStart(3, '0')} · {stats.chars.toLocaleString('en-US')} 字 ·{' '}
+          {fmtTokens(stats.tokens)} TOK · build {buildHash} · {buildTime} · 0 cookies
+        </div>
+      </div>
+    </footer>
+
+    <script src="../scripts/main.ts"></script>
+  </body>
+</html>

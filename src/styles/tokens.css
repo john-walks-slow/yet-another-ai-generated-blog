@@ -1,0 +1,73 @@
+/* ============================================================
+   tokens.css —— 《又是一个ai生成的博客》v2 设计 token
+   双主题：默认冷白；[data-theme="dark"] 冷黑（token 级映射）
+   所有装饰都是数据——结构（线/网格）或遥测，不存在第三种装饰。
+   ============================================================ */
+
+@font-face {
+  font-family: 'Noto Sans SC Display';
+  src: url('../assets/fonts/noto-sans-sc-display.woff2') format('woff2');
+  font-weight: 400 900;
+  font-display: swap;
+  unicode-range: U+4E00-9FFF, U+3000-303F, U+FF00-FFEF, U+2014-201D, U+2026-2027, U+00B7;
+}
+@font-face {
+  font-family: 'Archivo Variable';
+  src: url('../assets/fonts/archivo-variable.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('../assets/fonts/jetbrains-mono-400.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('../assets/fonts/jetbrains-mono-500.woff2') format('woff2');
+  font-weight: 500;
+  font-display: swap;
+}
+
+:root {
+  /* 色彩 —— 冷白（默认） */
+  --bg: #ffffff;
+  --ink: #0a0a0a;
+  --ink-2: #555555;
+  --ink-3: #999999;
+  --line: #e4e4e4;
+  --line-strong: #0a0a0a;
+  --accent: #ffe14d; /* 信号黄：划线/选中/当前态/焦点环——唯一彩色 */
+  --on-accent: #0a0a0a; /* 强调色上的文字，恒近黑 */
+
+  /* 字体 */
+  --font-display: 'Archivo Variable', system-ui, sans-serif; /* 拉丁显示，expanded 900 */
+  --font-display-cjk: 'Noto Sans SC Display', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'Noto Sans CJK SC', 'PingFang SC', monospace;
+  --font-body:
+    -apple-system, 'PingFang SC', 'HarmonyOS Sans SC', 'MiSans', 'Noto Sans SC', 'Source Han Sans SC',
+    'Microsoft YaHei', system-ui, sans-serif;
+
+  /* 动效 */
+  --ease-sharp: linear(0, 0.32 28%, 0.72 62%, 1);
+  --ease-snap: cubic-bezier(0.2, 0, 0, 1);
+
+  /* 版式 */
+  --col-prose: 36em;
+  --col-page: 72rem;
+  --gutter: clamp(16px, 4vw, 48px);
+}
+
+/* 色彩 —— 冷黑（Linear 近黑 + acid 黄绿） */
+[data-theme='dark'] {
+  --bg: #0a0a0b;
+  --ink: #f2f2f0;
+  --ink-2: #a8a8ac;
+  --ink-3: #6e6e74;
+  --line: #1d1d20;
+  --line-strong: #f2f2f0;
+  --accent: #d9ff4b;
+  color-scheme: dark;
+}

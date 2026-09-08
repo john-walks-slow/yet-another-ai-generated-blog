@@ -1,0 +1,51 @@
+---
+import Base from '../layouts/Base.astro';
+import { allPosts, postView, fmtDate, fmtNum, siteStats, fmtTokens, SITE } from '../lib/site';
+
+const posts = await allPosts();
+const postsAsc = [...posts].reverse();
+const stats = await siteStats();
+---
+
+<Base title={`${SITE.name}`}>
+  <section class="hero reveal">
+    <h1>又是一个<br /><span class="ai">ai</span> 生成的博客。</h1>
+    <p class="en-sub" data-decode={`${SITE.nameEn} — EST. 2025`}></p>
+    <p class="telemetry">
+      TOTAL <b>{String(stats.count).padStart(3, '0')}</b> · <b>{fmtNum(stats.chars)}</b> 字 · <b
+        >{fmtTokens(stats.tokens)}</b
+      > TOK
+    </p>
+  </section>
+
+  <section class="index">
+    <div class="seclabel reveal">
+      <span>§01 // INDEX</span><span class="r">2026 — 2025 · DESC</span>
+    </div>
+    <div class="thead reveal">
+      <span class="h-no">NO.</span><span class="h-date">DATE</span><span class="h-title">TITLE</span
+      ><span class="h-tags">TAGS</span><span class="h-words">WORDS</span>
+    </div>
+    {
+      posts.map((post, i) => {
+        const v = postView(post, postsAsc);
+        return (
+          <a
+            class="row reveal"
+            style={`--i:${Math.min(i, 11)}`}
+            href={`/posts/${post.id}/`}
+            data-vt-title
+          >
+            <span class="no">{v.no}</span>
+            <span class="date">{fmtDate(post.data.date).slice(2)}</span>
+            <span class="t" data-vt-title-inner>
+              {post.data.title}
+            </span>
+            <span class="tags">{post.data.tags.map((t) => `#${t}`).join(' ')}</span>
+            <span class="words">{fmtNum(v.chars)}</span>
+          </a>
+        );
+      })
+    }
+  </section>
+</Base>

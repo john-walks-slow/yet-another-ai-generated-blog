@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>论作为方法的提示词 · 又是一个ai生成的博客 · 文章页设计稿</title>
+<!-- 设计稿字体：生产环境将替换为构建期子集化自托管字体 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.2.5/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.2.5/500.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/noto-serif-sc@5.2.5/chinese-simplified-900.css">
+<style>
+  :root {
+    --paper:     #FAF7F2;
+    --ink:       #1A1815;
+    --ink-soft:  #6F6A61;
+    --ink-faint: #A39D92;
+    --hairline:  #E4DED3;
+    --indigo:    #363B8F;
+    --highlight: #F4D06F;
+    --seal:      #B3423A;
+
+    --font-serif: "Noto Serif SC", "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", "SimSun", serif;
+    --font-mono:  "JetBrains Mono", "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", ui-monospace, monospace;
+    --font-kai:   "LXGW WenKai", "Kaiti SC", "KaiTi", "STKaiti", serif;
+
+    --col-prose: 36em;
+    --rail: 15rem;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { color-scheme: light; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-serif);
+    font-size: 17px;
+    line-height: 1.9;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection { background: var(--highlight); color: var(--ink); }
+  a { color: inherit; text-decoration: none; }
+
+  .page { max-width: 64rem; margin: 0 auto; padding: 0 24px; }
+
+  /* ————— 顶栏 ————— */
+
+  .masthead {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 20px 0 16px;
+    border-bottom: 1px solid var(--ink);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.02em;
+  }
+  .brand { font-weight: 500; }
+  .brand .mark { color: var(--seal); margin-right: 6px; }
+  .masthead nav { display: flex; gap: 20px; }
+  .masthead nav a { color: var(--ink-soft); transition: color 120ms ease-out; }
+  .masthead nav a:hover { color: var(--indigo); }
+
+  a:focus-visible {
+    outline: 1px solid var(--indigo);
+    outline-offset: 3px;
+  }
+
+  /* ————— 文章头部 ————— */
+
+  .post-head { padding: 56px 0 40px; border-bottom: 1px solid var(--hairline); }
+
+  .meta-strip {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    color: var(--ink-soft);
+  }
+
+  .ai-badge {
+    border: 1px solid var(--ink);
+    padding: 1px 8px 0;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--ink);
+  }
+
+  .meta-strip .tags { margin-left: auto; color: var(--ink-faint); }
+
+  h1.post-title {
+    margin-top: 28px;
+    font-weight: 900;
+    font-size: clamp(1.75rem, 4.4vw, 2.6rem);
+    line-height: 1.34;
+    letter-spacing: 0.01em;
+    max-width: 22em;
+  }
+
+  .epigraph {
+    margin-top: 26px;
+    font-family: var(--font-kai);
+    font-size: 1.06rem;
+    color: var(--ink-soft);
+    line-height: 2;
+    max-width: 34em;
+  }
+  .epigraph .src {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--ink-faint);
+    margin-top: 2px;
+  }
+
+  /* ————— 正文（含侧栏注轨道） ————— */
+
+  .post-body {
+    position: relative;
+    padding: 48px 0 24px;
+  }
+
+  .prose {
+    max-width: var(--col-prose);
+    margin: 0 auto;
+  }
+
+  /* 侧栏注轨道：桌面端正文居中、右侧留轨道 */
+  @media (min-width: 1180px) {
+    .post-body { padding-right: calc(var(--rail) + 40px); }
+    .prose { margin: 0; }
+  }
+
+  .prose p { margin-bottom: 1.25em; text-align: justify; text-justify: inter-character; }
+  .prose p:lang(zh) { text-justify: inter-character; }
+
+  /* 首字下沉：先极简，后点缀 */
+  .prose > p:first-of-type::first-letter {
+    float: left;
+    font-size: 3.05em;
+    line-height: 1;
+    font-weight: 900;
+    padding: 0.1em 0.14em 0 0;
+  }
+
+  /* 人的划线：荧光笔（<mark> 语义，RSS/阅读器有默认样式） */
+  mark.pen { background: linear-gradient(to top, var(--highlight) 42%, transparent 42%); color: inherit; }
+  .sr-only {
+    position: absolute; width: 1px; height: 1px;
+    clip: rect(0 0 0 0); overflow: hidden; white-space: nowrap;
+  }
+
+  /* 人的引语：楷体 */
+  .prose blockquote {
+    margin: 2em 0;
+    padding-left: 1.4em;
+    border-left: 2px solid var(--highlight);
+    font-family: var(--font-kai);
+    font-size: 1.02rem;
+    color: var(--ink-soft);
+  }
+
+  .prose code {
+    font-family: var(--font-mono);
+    font-size: 0.86em;
+    background: rgba(28, 26, 22, 0.05);
+    padding: 0.1em 0.36em;
+  }
+
+  .prose a {
+    color: var(--indigo);
+    background-image: linear-gradient(var(--indigo), var(--indigo));
+    background-repeat: no-repeat;
+    background-size: 0% 1px;
+    background-position: 0 96%;
+    transition: background-size 160ms ease-out;
+  }
+  .prose a:hover { background-size: 100% 1px; }
+
+  /* 侧栏注 */
+  .sn-num {
+    font-family: var(--font-mono);
+    font-size: 0.72em;
+    color: var(--indigo);
+    vertical-align: super;
+    cursor: help;
+  }
+  .sidenote {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.8;
+    color: var(--ink-soft);
+    border-top: 1px solid var(--hairline);
+    padding-top: 8px;
+    margin-bottom: 1.6em;
+  }
+  .sidenote .sn-num { color: var(--seal); }
+
+  @media (min-width: 1180px) {
+    .sidenote {
+      float: right;
+      clear: right;
+      width: var(--rail);
+      margin-right: calc(-1 * (var(--rail) + 40px));
+      margin-top: 0.3em;
+      margin-bottom: 0.6em;
+    }
+  }
+  @media (max-width: 1179px) {
+    .sidenote { border-left: 2px solid var(--hairline); border-top: none; padding: 4px 0 4px 12px; }
+  }
+
+  /* ————— 生成记录（签名组件） ————— */
+
+  .generation-record {
+    max-width: var(--col-prose);
+    margin: 56px auto 0;
+    border: 1px solid var(--ink);
+    padding: 20px 24px 64px;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    line-height: 2.05;
+    letter-spacing: 0.02em;
+    position: relative;
+  }
+
+  .generation-record .gr-title {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    color: var(--ink-soft);
+    border-bottom: 1px solid var(--hairline);
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+  }
+
+  .gr-row { display: flex; gap: 16px; }
+  .gr-row .k { width: 7em; color: var(--ink-faint); flex-shrink: 0; }
+  .gr-row .v { color: var(--ink); }
+  .gr-row .v .human { color: var(--seal); }
+
+  .gr-note {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid var(--hairline);
+    color: var(--ink-faint);
+    font-size: 11.5px;
+  }
+
+  /* 已阅章：人的鉴藏印（阳文：朱底纸字） */
+  .seal {
+    position: absolute;
+    right: 22px;
+    bottom: 16px;
+    width: 34px;
+    height: 34px;
+    background: var(--seal);
+    color: var(--paper);
+    font-family: var(--font-kai);
+    font-size: 19px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(-6deg);
+    user-select: none;
+  }
+
+  /* ————— 上下篇 ————— */
+
+  .post-nav {
+    max-width: var(--col-prose);
+    margin: 40px auto 0;
+    display: flex;
+    border-top: 1px solid var(--ink);
+  }
+  .post-nav a {
+    flex: 1;
+    padding: 18px 4px 8px;
+    font-size: 0.98rem;
+    font-weight: 700;
+    line-height: 1.7;
+  }
+  .post-nav a:hover { color: var(--indigo); }
+  .post-nav .label {
+    display: block;
+    font-family: var(--font-mono);
+    font-weight: 400;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    margin-bottom: 6px;
+  }
+  .post-nav .next { text-align: right; }
+
+  /* ————— 页脚 ————— */
+
+  .site-footer {
+    margin-top: 72px;
+    border-top: 1px solid var(--ink);
+    padding: 24px 0 48px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 2.1;
+    color: var(--ink-faint);
+    letter-spacing: 0.02em;
+  }
+  .site-footer .links a { color: var(--ink-soft); }
+  .site-footer .links a:hover { color: var(--indigo); }
+  .site-footer .links span { margin: 0 6px; color: var(--hairline); }
+  .site-footer .build { margin-top: 2px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+
+  /* 印刷品应当经得起真的打印 */
+  @media print {
+    body { background: #fff; font-size: 11.5pt; }
+    .masthead nav, .site-footer, .post-nav, .gr-note { display: none; }
+    .prose, .generation-record, .post-head { max-width: 100%; }
+    .sidenote { display: none; }
+    .generation-record { border-color: #999; }
+    .seal { background: #b3423a; color: #fff; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <a class="brand" href="#"><span class="mark">◈</span>又是一个ai生成的博客</a>
+    <nav>
+      <a href="#">归档</a>
+      <a href="#">关于</a>
+      <a href="#">RSS</a>
+    </nav>
+  </header>
+
+  <article>
+    <header class="post-head">
+      <div class="meta-strip">
+        <span class="ai-badge">AI GENERATED</span>
+        <span>2026-09-05</span>
+        <span>8 MIN READ</span>
+        <span class="tags">#哲学</span>
+      </div>
+      <h1 class="post-title">论作为方法的提示词</h1>
+      <p class="epigraph">
+        「提示词不是咒语，而是一份把思辨外包给机器的协议。」
+        <span class="src">—— 选题备注，2026-09-04，人工投入 4 分钟</span>
+      </p>
+    </header>
+
+    <div class="post-body">
+      <div class="prose">
+
+        <p>把一句话交给模型，换回一篇文章——这件事被描述成魔法的时候太多了，被描述成劳动的时候太少了。<span class="sn-num">¹</span>本站决定从自己开刀：这篇文章的起点不是灵感，而是一条二十七个字的指令，以及一个只有十二分钟空闲的人。</p>
+
+        <aside class="sidenote"><span class="sn-num">¹</span> 本文使用的确切指令见文末生成记录。「魔法」叙事的批判，参见本站《上下文窗口的形而上学》。</aside>
+
+        <p>提示词常被比作咒语，暗示念对了就能召唤结果。但咒语的本质是<b>重复</b>——念错一个音节就失效；提示词的本质却是<b>委托</b>——你描述意图，把执行交给一个你并不真正理解的系统。这更像甲方给乙方写需求文档，而不是巫师召唤精灵。</p>
+
+        <p>委托关系里真正的技艺，不在措辞，而在判断：哪些思辨可以外包，哪些不可以。<mark class="pen"><span class="sr-only">（作者划线）</span>可以外包的是展开：论证、铺陈、例证、把一个念头拉长成三千字。</mark><span class="sn-num">²</span>不可以外包的是立场：一句结论为什么值得说出口，只有那个愿意为它署名的人知道。</p>
+
+        <aside class="sidenote"><span class="sn-num">²</span> 划线为本站固定语法：正文中出现荧光标记，即表示「这一句是人划的」。全文通常不超过两处。</aside>
+
+        <p>所以提示词是一种方法：它强迫你在写作之前就完成思辨。传统的写作把想清楚和写出来混在一起，因此拖延；提示词把两者拆开，你只剩下想清楚这一件事可做。从这个角度看，本站作者投入的十二分钟里，没有一分钟是被浪费的——它们全部花在了唯一不能代劳的环节上。</p>
+
+        <blockquote>
+          写作的障碍从来不是打字的速度，而是敢于承认自己想说什么。<br>
+          提示词只是把这份承认，提前到了打字之前。
+        </blockquote>
+
+        <p>当然，这一切有一个不舒服的推论：如果展开可以外包，那么被外包的部分就不构成作者性。署名的那个人必须接受，这篇文章里真正属于他的，可能只有划了两道荧光的那两句话，和一个「已阅」。这不是谦辞，是账目——本站把这笔账印在每篇文章的末尾，见下。</p>
+
+        <p>剩下的部分，是模型的。它写得比我快，比我耐心，偶尔比我深刻。我为它排好版式，盖了章，然后去构思下一篇。你正在读的这篇文章，就是这套流程的第十一次运转。</p>
+
+      </div>
+
+      <div class="generation-record">
+        <div class="gr-title">GENERATION RECORD · 生成记录</div>
+        <div class="gr-row"><span class="k">模型</span><span class="v">claude-opus-4.6</span></div>
+        <div class="gr-row"><span class="k">人工投入</span><span class="v"><span class="human">12 分钟</span>（选题 4 · 审读 8）</span></div>
+        <div class="gr-row"><span class="k">修订</span><span class="v">3 轮（均由模型自改）</span></div>
+        <div class="gr-row"><span class="k">润色</span><span class="v">未经人工润色</span></div>
+        <div class="gr-row"><span class="k">过程</span><span class="v">prompt + 大纲 → <a href="#" style="color:var(--indigo)">完整生成链</a></span></div>
+        <div class="gr-note">本站全部文章由 AI 生成，人工仅参与选题与审读。署名者对内容负最终责任。</div>
+        <div class="seal">阅</div>
+      </div>
+
+      <nav class="post-nav">
+        <a href="#" class="prev"><span class="label">← 上一篇 · 09-01</span>上下文窗口的形而上学</a>
+        <a href="#" class="next"><span class="label">下一篇 · 09-08 →</span>为什么我不检查这个博客的代码</a>
+      </nav>
+    </div>
+  </article>
+
+  <footer class="site-footer">
+    <div>由 AI 生成 · 人工仅参与选题与审读 · 累计投入 4.6 小时</div>
+    <div class="links">
+      <a href="#">RSS</a><span>·</span><a href="#">归档</a><span>·</span><a href="#">关于</a><span>·</span><a href="#">版权页</a>
+    </div>
+    <div class="build">build 8f3a2c1 · 2026-09-08 21:57 UTC</div>
+  </footer>
+
+</div>
+</body>
+</html>

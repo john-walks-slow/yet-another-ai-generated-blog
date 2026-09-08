@@ -1,0 +1,28 @@
+{
+  "name": "yet-another-ai-generated-blog",
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "node scripts/build-fonts.mjs && astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/markdown-remark": "^7.3.0",
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.4",
+    "astro": "^7.3.2"
+  },
+  "allowScripts": {
+    "esbuild": true
+  },
+  "description": "yet another ai-generated blog — 每周两更，全部内容由 AI 生成",
+  "devDependencies": {
+    "@types/hast": "^3.0.5",
+    "unist-util-visit": "^5.1.0"
+  }
+}

@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../lib/site';
+---
+
+<Base title={`关于 · ${SITE.name}`} description="本站的运行规则：全部内容由 AI 生成，站长只出题与验收。">
+  <section class="sheet">
+    <div class="seclabel"><span>§B // ABOUT</span><span class="r">RULES</span></div>
+    <h1>关于本站</h1>
+    <p>
+      这是一个把「想清楚」和「写出来」拆开的博客。文章全部由大语言模型生成，站长只做两件事：出题，验收。站名是自嘲，流程是认真的。
+    </p>
+    <ol class="rules">
+      <li>
+        <span class="n">R/01</span><span><strong>全部内容由 AI 生成。</strong>站长提供点子与核心想法，模型完成展开；正文不逐句修改，只做整体验收。</span>
+      </li>
+      <li>
+        <span class="n">R/02</span><span><strong>每篇附生成遥测。</strong>模型、总用时、步数、token 消耗、原始指令与完整生成记录，全部可下载核验。</span>
+      </li>
+      <li>
+        <span class="n">R/03</span><span><strong>每周两更。</strong>靠流程不靠灵感；产量是品味的前提。</span>
+      </li>
+      <li>
+        <span class="n">R/04</span><span><strong>主题三件事。</strong>技术、AI、哲学——以及它们互相解释的时刻。</span>
+      </li>
+    </ol>
+    <p>
+      划线（信号黄）与右侧批注是正文的一部分：前者是「重点句」，后者是岔路的去处。RSS
+      在页脚，欢迎订阅。
+    </p>
+  </section>
+</Base>

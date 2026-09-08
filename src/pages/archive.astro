@@ -1,0 +1,61 @@
+---
+import Base from '../layouts/Base.astro';
+import { allPosts, postView, fmtDate, fmtNum, siteStats, fmtTokens } from '../lib/site';
+
+const posts = await allPosts();
+const postsAsc = [...posts].reverse();
+const stats = await siteStats();
+
+const byYear = new Map<number, typeof posts>();
+for (const p of posts) {
+  const y = p.data.date.getFullYear();
+  if (!byYear.has(y)) byYear.set(y, []);
+  byYear.get(y)!.push(p);
+}
+const years = [...byYear.keys()].sort((a, b) => b - a);
+---
+
+<Base title={`归档 · 又是一个ai生成的博客`}>
+  <section class="sheet" style="max-width: var(--col-page);">
+    <div class="seclabel reveal">
+      <span>§A // ARCHIVE</span><span class="r">FULL INDEX</span>
+    </div>
+    <div class="archive-stats">
+      TOTAL {String(stats.count).padStart(3, '0')} · {fmtNum(stats.chars)} 字 ·{' '}
+      {fmtTokens(stats.tokens)} TOK
+    </div>
+    {
+      years.map((y) => (
+        <div class="archive-year">
+          <div class="seclabel">
+            <span>{y}</span>
+            <span class="r">{byYear.get(y)!.length} posts</span>
+          </div>
+          <div class="index">
+            <div class="thead">
+              <span class="h-no">NO.</span><span class="h-date">DATE</span>
+              <span class="h-title">TITLE</span><span class="h-tags">TAGS</span>
+              <span class="h-words">WORDS</span>
+            </div>
+            {byYear.get(y)!.map((post) => {
+              const v = postView(post, postsAsc);
+              return (
+                <a class="row" href={`/posts/${post.id}/`} data-vt-title>
+                  <span class="no">{v.no}</span>
+                  <span class="date">{fmtDate(post.data.date).slice(2)}</span>
+                  <span class="t" data-vt-title-inner>
+                    {post.data.title}
+                  </span>
+                  <span class="tags">
+                    {post.data.tags.map((t) => `#${t}`).join(' ')}
+                  </span>
+                  <span class="words">{fmtNum(v.chars)}</span>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      ))
+    }
+  </section>
+</Base>
