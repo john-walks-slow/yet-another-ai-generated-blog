@@ -28,10 +28,13 @@ const buildTime = __BUILD_TIME__;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="alternate" type="application/rss+xml" title={SITE.name} href="/rss.xml" />
+    <link rel="canonical" href={Astro.url.pathname === '/' ? SITE.url : SITE.url + Astro.url.pathname} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta property="og:site_name" content={SITE.name} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
     <meta name="generator" content={Astro.generator} />
     <script is:inline>
       // 首帧防闪烁：CSS 之前读主题
