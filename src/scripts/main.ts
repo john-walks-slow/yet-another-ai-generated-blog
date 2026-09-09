@@ -65,7 +65,10 @@ function scramble(el: HTMLElement, duration = 1100): void {
 }
 
 const decs = document.querySelectorAll<HTMLElement>('[data-decode]');
-if (!REDUCED && decs.length) {
+const SEEN_KEY = 'decode-seen';
+const seen = sessionStorage.getItem(SEEN_KEY);
+if (!REDUCED && !seen && decs.length) {
+  sessionStorage.setItem(SEEN_KEY, '1');
   const io = new IntersectionObserver(
     (entries) => {
       for (const e of entries) {
