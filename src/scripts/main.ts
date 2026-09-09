@@ -21,34 +21,51 @@ toggle?.addEventListener('click', () => {
   applyTheme(next);
 });
 
-/* ——— decode（scramble，仅等宽拉丁层） ——— */
+/* ——— decode（scramble，仅拉丁层） ——— */
+/* 最终文字已 SSR 在 DOM 里（零 CLS：不注入、不删空元素）；scramble 只做逐字符原地替换 */
 const POOL = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789/\\_<>[]{}$#*+=-';
 const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-function scramble(el: HTMLElement, duration = 900): void {
-  const final = el.dataset.decode ?? el.textContent ?? '';
-  if (!final) return;
+function textNodes(el: HTMLElement): Text[] {
+  const out: Text[] = [];
+  const walk = (n: Node): void => {
+    for (const c of n.childNodes) {
+      if (c.nodeType === Node.TEXT_NODE && c.textContent) out.push(c as Text);
+      else if (c.nodeType === Node.ELEMENT_NODE && (c as Element).tagName !== 'BR') walk(c);
+    }
+  };
+  walk(el);
+  return out;
+}
+
+function scramble(el: HTMLElement, duration = 1100): void {
+  const nodes = textNodes(el).map((n) => ({ node: n, final: n.data }));
+  const len = nodes.reduce((s, x) => s + x.final.length, 0);
+  if (!len) return;
   const start = performance.now();
-  const len = final.length;
   const frame = (now: number): void => {
     const t = Math.min(1, (now - start) / duration);
-    const locked = Math.floor(len * Math.max(0, (t - 0.3) / 0.7));
-    let out = '';
-    for (let i = 0; i < len; i++) {
-      const ch = final[i]!;
-      out += i < locked || !/[A-Za-z0-9]/.test(ch) ? ch : POOL[(Math.random() * POOL.length) | 0];
+    const lockedTotal = Math.floor(len * Math.max(0, (t - 0.3) / 0.7));
+    let idx = 0;
+    for (const { node, final } of nodes) {
+      let out = '';
+      for (let i = 0; i < final.length; i++, idx++) {
+        const ch = final[i]!;
+        out +=
+          idx < lockedTotal || !/[A-Za-z0-9]/.test(ch)
+            ? ch
+            : POOL[(Math.random() * POOL.length) | 0];
+      }
+      node.data = out;
     }
-    el.textContent = out;
     if (t < 1) requestAnimationFrame(frame);
-    else el.textContent = final;
+    else for (const { node, final } of nodes) node.data = final;
   };
   requestAnimationFrame(frame);
 }
 
 const decs = document.querySelectorAll<HTMLElement>('[data-decode]');
-if (REDUCED) {
-  decs.forEach((el) => (el.textContent = el.dataset.decode ?? ''));
-} else if (decs.length) {
+if (!REDUCED && decs.length) {
   const io = new IntersectionObserver(
     (entries) => {
       for (const e of entries) {

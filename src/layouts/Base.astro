@@ -72,8 +72,6 @@ const buildHash = __BUILD_HASH__;
 
     <footer class="site-footer">
       <div class="inner">
-        <a href={`${BASE}rss.xml`}>RSS</a><span class="sep">·</span><a href={`${BASE}archive/`}>归档</a
-        ><span class="sep">·</span><a href={`${BASE}about/`}>关于</a>
         <span class="build">
           TOTAL {String(stats.count).padStart(3, '0')} · {stats.chars.toLocaleString('en-US')} 字 ·{' '}
           {fmtTokens(stats.tokens)} TOK · build {buildHash} · 0 cookies

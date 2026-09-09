@@ -9,8 +9,7 @@ const stats = await siteStats();
 
 <Base title={`${SITE.name}`}>
   <section class="hero reveal">
-    <h1>又是一个<br /><span class="ai">ai</span> 生成的博客。</h1>
-    <p class="en-sub" data-decode={SITE.nameEn}></p>
+    <h1 data-decode>YET ANOTHER<br />AI-GENERATED BLOG</h1>
     <p class="telemetry">
       TOTAL <b>{String(stats.count).padStart(3, '0')}</b> · <b>{fmtNum(stats.chars)}</b> 字 · <b
         >{fmtTokens(stats.tokens)}</b
