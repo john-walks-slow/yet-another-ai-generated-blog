@@ -18,6 +18,12 @@ interface Props {
 const { title, description = SITE.desc, progress = false } = Astro.props;
 const stats = await siteStats();
 const buildHash = __BUILD_HASH__;
+
+// 当前路径 → 高亮对应 nav 项（aria-current）
+const path = Astro.url.pathname;
+const homePath = BASE.replace(/\/$/, ''); // '/yet-another-ai-generated-blog'（无尾斜杠版）
+const isHome = path === BASE || path === homePath;
+const isAbout = path.startsWith(`${BASE}about`);
 ---
 
 <!doctype html>
@@ -55,8 +61,8 @@ const buildHash = __BUILD_HASH__;
     <div class="page">
       <header class="masthead">
         <nav>
-          <a href={BASE} aria-current="page">HOME</a>
-          <a href={`${BASE}about/`}>ABOUT</a>
+          <a href={BASE} aria-current={isHome ? 'page' : undefined}>HOME</a>
+          <a href={`${BASE}about/`} aria-current={isAbout ? 'page' : undefined}>ABOUT</a>
           <a href={`${BASE}rss.xml`}>RSS</a>
           <button class="theme-toggle" type="button">DARK</button>
         </nav>
