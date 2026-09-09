@@ -512,19 +512,6 @@ mark.pen {
   }
 }
 
-/* ——————————————— 归档页 ——————————————— */
-.archive-year {
-  margin-top: 40px;
-}
-.archive-stats {
-  font-family: var(--font-mono);
-  font-size: 12.5px;
-  color: var(--ink-2);
-  font-variant-numeric: tabular-nums;
-  padding: 12px 8px;
-  border-bottom: 1px solid var(--line-strong);
-}
-
 /* ——————————————— 静态信息页（about/colophon/404） ——————————————— */
 .sheet {
   max-width: var(--col-prose);
