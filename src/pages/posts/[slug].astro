@@ -8,6 +8,7 @@ import {
   fmtNum,
   fmtDuration,
   type Post,
+  BASE,
 } from '../../lib/site';
 
 export async function getStaticPaths() {
@@ -43,15 +44,8 @@ const nextView = next ? postView(next, postsAsc) : null;
         <span>{fmtDate(d.date)}</span>
         <span>{d.tags.map((t) => `#${t}`).join(' ')}</span>
         <span>{v.minutes} MIN</span>
-        <a class="gen-link" href="#gen">GEN ▸</a>
       </div>
       <h1 class="post-title">{d.title}</h1>
-    </header>
-
-    <div class="post-body">
-      <div class="prose">
-        <Content />
-      </div>
 
       <details class="gen-record" id="gen">
         <summary>
@@ -86,18 +80,24 @@ const nextView = next ? postView(next, postsAsc) : null;
         {
           d.transcript && (
             <div class="gen-links">
-              <a href={d.transcript} download>
+              <a href={`${BASE}${d.transcript.replace(/^\//, '')}`} download>
                 TRANSCRIPT · {d.transcript.split('/').pop()} ↓
               </a>
             </div>
           )
         }
       </details>
+    </header>
+
+    <div class="post-body">
+      <div class="prose">
+        <Content />
+      </div>
 
       <nav class="post-nav">
         {
           prev && prevView ? (
-            <a href={`/posts/${prev.id}/`}>
+            <a href={`${BASE}posts/${prev.id}/`}>
               <span class="label">← {prevView.no} · {fmtDate(prev.data.date).slice(2)}</span>
               {prev.data.title}
             </a>
@@ -107,7 +107,7 @@ const nextView = next ? postView(next, postsAsc) : null;
         }
         {
           next && nextView ? (
-            <a class="next" href={`/posts/${next.id}/`} data-vt-title>
+            <a class="next" href={`${BASE}posts/${next.id}/`} data-vt-title>
               <span class="label">{nextView.no} · {fmtDate(next.data.date).slice(2)} →</span>
               {next.data.title}
             </a>

@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { allPosts, postView, fmtDate, fmtNum, siteStats, fmtTokens } from '../lib/site';
+import { allPosts, postView, fmtDate, fmtNum, siteStats, fmtTokens , BASE } from '../lib/site';
 
 const posts = await allPosts();
 const postsAsc = [...posts].reverse();
@@ -40,7 +40,7 @@ const years = [...byYear.keys()].sort((a, b) => b - a);
             {byYear.get(y)!.map((post) => {
               const v = postView(post, postsAsc);
               return (
-                <a class="row" href={`/posts/${post.id}/`} data-vt-title>
+                <a class="row" href={`${BASE}posts/${post.id}/`} data-vt-title>
                   <span class="no">{v.no}</span>
                   <span class="date">{fmtDate(post.data.date).slice(2)}</span>
                   <span class="t" data-vt-title-inner>

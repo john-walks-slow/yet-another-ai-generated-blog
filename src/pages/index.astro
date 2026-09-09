@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { allPosts, postView, fmtDate, fmtNum, siteStats, fmtTokens, SITE } from '../lib/site';
+import { allPosts, postView, fmtDate, fmtNum, siteStats, fmtTokens, SITE, BASE } from '../lib/site';
 
 const posts = await allPosts();
 const postsAsc = [...posts].reverse();
@@ -10,7 +10,7 @@ const stats = await siteStats();
 <Base title={`${SITE.name}`}>
   <section class="hero reveal">
     <h1>又是一个<br /><span class="ai">ai</span> 生成的博客。</h1>
-    <p class="en-sub" data-decode={`${SITE.nameEn} — EST. 2025`}></p>
+    <p class="en-sub" data-decode={SITE.nameEn}></p>
     <p class="telemetry">
       TOTAL <b>{String(stats.count).padStart(3, '0')}</b> · <b>{fmtNum(stats.chars)}</b> 字 · <b
         >{fmtTokens(stats.tokens)}</b
@@ -33,7 +33,7 @@ const stats = await siteStats();
           <a
             class="row reveal"
             style={`--i:${Math.min(i, 11)}`}
-            href={`/posts/${post.id}/`}
+            href={`${BASE}posts/${post.id}/`}
             data-vt-title
           >
             <span class="no">{v.no}</span>

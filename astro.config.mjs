@@ -22,7 +22,9 @@ const unifiedProcessor = unified({ rehypePlugins: [rehypeAnnotations] });
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://yet-another-ai-generated.blog',
+  // GitHub Pages 项目页：https://john-walks-slow.github.io/yet-another-ai-generated-blog/
+  site: 'https://john-walks-slow.github.io',
+  base: '/yet-another-ai-generated-blog',
   integrations: [sitemap()],
   markdown: {
     processor: unifiedProcessor,

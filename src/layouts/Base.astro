@@ -7,7 +7,7 @@
  */
 import '../styles/tokens.css';
 import '../styles/global.css';
-import { SITE, siteStats, fmtTokens } from '../lib/site';
+import { SITE, BASE, siteStats, fmtTokens } from '../lib/site';
 
 interface Props {
   title: string;
@@ -18,7 +18,6 @@ interface Props {
 const { title, description = SITE.desc, progress = false } = Astro.props;
 const stats = await siteStats();
 const buildHash = __BUILD_HASH__;
-const buildTime = __BUILD_TIME__;
 ---
 
 <!doctype html>
@@ -28,9 +27,9 @@ const buildTime = __BUILD_TIME__;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="alternate" type="application/rss+xml" title={SITE.name} href="/rss.xml" />
-    <link rel="canonical" href={Astro.url.pathname === '/' ? SITE.url : SITE.url + Astro.url.pathname} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" type="application/rss+xml" title={SITE.name} href={`${BASE}rss.xml`} />
+    <link rel="canonical" href={Astro.url.href} />
+    <link rel="icon" type="image/svg+xml" href={`${BASE}favicon.svg`} />
     <meta property="og:site_name" content={SITE.name} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -55,14 +54,13 @@ const buildTime = __BUILD_TIME__;
 
     <div class="page">
       <header class="masthead">
-        <a class="brand" href="/">
+        <a class="brand" href={BASE}>
           <span class="mark" aria-hidden="true"></span>又是一个ai生成的博客
         </a>
         <nav>
-          <a href="/archive/">INDEX</a>
-          <a href="/about/">ABOUT</a>
-          <a href="/colophon/">COLOPHON</a>
-          <a href="/rss.xml">RSS</a>
+          <a href={`${BASE}archive/`}>ARCHIVE</a>
+          <a href={`${BASE}about/`}>ABOUT</a>
+          <a href={`${BASE}rss.xml`}>RSS</a>
           <button class="theme-toggle" type="button">DARK</button>
         </nav>
       </header>
@@ -74,16 +72,12 @@ const buildTime = __BUILD_TIME__;
 
     <footer class="site-footer">
       <div class="inner">
-        <div class="row1">
-          <span class="name">又是一个ai生成的博客</span>
-          <a href="/rss.xml">RSS</a><span class="sep">·</span><a href="/archive/">归档</a
-          ><span class="sep">·</span><a href="/about/">关于</a
-          ><span class="sep">·</span><a href="/colophon/">版权页</a>
-        </div>
-        <div class="build">
+        <a href={`${BASE}rss.xml`}>RSS</a><span class="sep">·</span><a href={`${BASE}archive/`}>归档</a
+        ><span class="sep">·</span><a href={`${BASE}about/`}>关于</a>
+        <span class="build">
           TOTAL {String(stats.count).padStart(3, '0')} · {stats.chars.toLocaleString('en-US')} 字 ·{' '}
-          {fmtTokens(stats.tokens)} TOK · build {buildHash} · {buildTime} · 0 cookies
-        </div>
+          {fmtTokens(stats.tokens)} TOK · build {buildHash} · 0 cookies
+        </span>
       </div>
     </footer>
 

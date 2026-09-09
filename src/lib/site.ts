@@ -84,9 +84,14 @@ export function fmtDuration(s: number): string {
 
 export { fmtNum };
 
+/** 路径前缀（与 astro.config 的 base 一致；规范化为带尾斜杠：'/' 或 '/repo/'） */
+export const BASE: string = import.meta.env.BASE_URL.endsWith('/')
+  ? import.meta.env.BASE_URL
+  : import.meta.env.BASE_URL + '/';
+
 export const SITE = {
   name: '又是一个ai生成的博客',
   nameEn: 'YET ANOTHER AI-GENERATED BLOG',
   desc: '每周两更。文章全部由 AI 生成，站长只出题与验收；每篇附完整生成遥测。',
-  url: 'https://yet-another-ai-generated.blog',
+  url: 'https://john-walks-slow.github.io/yet-another-ai-generated-blog',
 } as const;

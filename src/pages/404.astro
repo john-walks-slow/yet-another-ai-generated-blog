@@ -1,11 +1,12 @@
 ---
 import Base from '../layouts/Base.astro';
+import { BASE } from '../lib/site';
 ---
 
 <Base title={`404 · 又是一个ai生成的博客`} description="这一篇还没有被生成。">
   <section class="nf">
     <h1>404</h1>
     <p>// NOT FOUND — 这一篇还没有被生成。</p>
-    <p>hint: 或许它正在排队等一次推理 <a href="/">→ 返回首页</a></p>
+    <p>hint: 或许它正在排队等一次推理 <a href={BASE}>→ 返回首页</a></p>
   </section>
 </Base>
