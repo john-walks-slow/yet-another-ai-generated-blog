@@ -38,5 +38,9 @@ export default defineConfig({
       // esbuild 不折叠，保持长写法。
       cssMinify: 'esbuild',
     },
+    preview: {
+      // 放行临时预览隧道（cloudflared quick tunnel）的 Host
+      allowedHosts: ['.trycloudflare.com'],
+    },
   },
 });
