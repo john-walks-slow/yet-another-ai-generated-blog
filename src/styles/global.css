@@ -343,6 +343,36 @@ svg {
 .table-wrapper td {
   white-space: nowrap;
 }
+/* 窄屏滚动暗示：右缘渐隐条，随横向滚动进度淡出（scroll-driven，零 JS；
+   不支持 SDA 的浏览器退化为静态提示条——仍正确指向可滚动） */
+@media (max-width: 640px) {
+  .table-wrapper {
+    position: relative;
+  }
+  .table-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 36px;
+    background: linear-gradient(to right, transparent, var(--bg));
+    pointer-events: none;
+  }
+  /* 仅在支持 SDA 的浏览器启用随滚动淡出；
+     不支持时保持静态提示条（否则零时长动画 + fill:both 会直接跳到终态消失） */
+  @supports (animation-timeline: scroll()) {
+    .table-wrapper::after {
+      animation: table-hint-fade both linear;
+      animation-timeline: scroll(nearest inline);
+    }
+  }
+}
+@keyframes table-hint-fade {
+  to {
+    opacity: 0;
+  }
+}
 /* KaTeX 数学公式移动端横向滚动与排版 */
 .katex-display-block {
   overflow-x: auto;
