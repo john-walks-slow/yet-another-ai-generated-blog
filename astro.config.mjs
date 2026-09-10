@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 import { execSync } from 'node:child_process';
 import { unified } from '@astrojs/markdown-remark';
 import { rehypeAnnotations } from './src/plugins/rehype-annotations';
+import { rehypeMathKatex } from './src/plugins/rehype-math-katex';
 import sitemap from '@astrojs/sitemap';
 
 // 构建指纹（git 不存在时用内容无关的占位）
@@ -17,8 +18,8 @@ function buildHash() {
 const hash = buildHash();
 const time = new Date().toISOString().replace('T', ' ').slice(0, 16) + ' UTC';
 
-// 两个正文语法：==荧光划线== 与 ^[侧栏批注]
-const unifiedProcessor = unified({ rehypePlugins: [rehypeAnnotations] });
+// 正文语法：==荧光划线== 与 ^[侧栏批注]，以及 KaTeX 数学公式渲染
+const unifiedProcessor = unified({ rehypePlugins: [rehypeAnnotations, rehypeMathKatex] });
 
 // https://astro.build/config
 export default defineConfig({

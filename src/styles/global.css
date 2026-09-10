@@ -298,6 +298,63 @@ svg {
   text-align: justify;
   text-justify: inter-character;
 }
+.prose ul,
+.prose ol {
+  margin: 1.2em 0 1.5em;
+  padding-left: 1.6em;
+}
+.prose li {
+  margin-bottom: 0.5em;
+  line-height: 1.8;
+}
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.8em 0;
+  font-size: 0.9em;
+  line-height: 1.6;
+}
+.prose th,
+.prose td {
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  text-align: left;
+}
+.prose th {
+  background: color-mix(in srgb, var(--ink) 4%, var(--bg));
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  color: var(--ink-2);
+}
+/* 表格响应式横向滚动包装 */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 1.8em 0;
+  border: 1px solid var(--line);
+}
+.table-wrapper table {
+  margin: 0;
+  border: none;
+  min-width: 520px;
+}
+.table-wrapper th,
+.table-wrapper td {
+  white-space: nowrap;
+}
+/* KaTeX 数学公式移动端横向滚动与排版 */
+.katex-display-block {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding: 0.8em 0;
+  margin: 1.4em 0;
+}
+.katex-inline-block {
+  display: inline-block;
+  vertical-align: middle;
+}
 .prose blockquote {
   margin: 2em 0;
   padding: 4px 0 4px 18px;

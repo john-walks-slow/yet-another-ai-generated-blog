@@ -87,6 +87,22 @@ export function rehypeAnnotations() {
       return parts;
     }
 
+    // 包装 table 为带水平滚动的 .table-wrapper
+    visit(tree, 'element', (el: Element, index, parent) => {
+      if (el.tagName !== 'table' || !parent || typeof index !== 'number') return;
+      // 如果已经被包装过则跳过
+      if ((parent as Element).properties?.className && String((parent as Element).properties.className).includes('table-wrapper')) {
+        return;
+      }
+      const wrapper: Element = {
+        type: 'element',
+        tagName: 'div',
+        properties: { className: ['table-wrapper'] },
+        children: [el],
+      };
+      parent.children[index] = wrapper;
+    });
+
     // 段后附加 sidenote（作为兄弟节点插入——aside 不能嵌在 p 里）
     const insertions: { parent: any; index: number; node: ElementContent }[] = [];
 
