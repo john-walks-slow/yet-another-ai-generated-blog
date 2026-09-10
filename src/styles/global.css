@@ -103,6 +103,16 @@ svg {
   }
 }
 
+/* ——————————————— masthead 副行（署名） ——————————————— */
+.masthead-sub {
+  padding: 7px 0 6px;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--ink-3);
+}
+
 /* ——————————————— 区块标签 ——————————————— */
 .seclabel {
   font-family: var(--font-mono);
