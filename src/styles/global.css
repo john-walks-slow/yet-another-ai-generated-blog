@@ -546,6 +546,10 @@ mark.pen {
   color: var(--ink-2);
   white-space: pre-wrap;
   overflow-wrap: anywhere;
+  max-height: 240px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
 }
 .gen-prompt .ph {
   color: var(--ink-3);
@@ -553,12 +557,17 @@ mark.pen {
   margin-bottom: 6px;
   letter-spacing: 0.12em;
 }
-/* 头部引言 —— GEN 记录与正文之间，与正文列对齐 */
+/* 头部引言 —— GEN 记录之后、正文之前，与正文列同宽对齐（在 .post-body 内） */
 .epigraph {
   max-width: var(--col-prose);
-  margin: 40px auto 0;
+  margin: 0 auto 36px;
   padding-left: 18px;
   border-left: 2px solid var(--line-strong);
+}
+@media (min-width: 1180px) {
+  .epigraph {
+    margin-left: 0; /* 与 .prose 同步：桌面端正文列 flush left */
+  }
 }
 .epigraph .epigraph-text {
   font-size: 14px;
@@ -573,7 +582,6 @@ mark.pen {
 }
 @media (max-width: 640px) {
   .epigraph {
-    margin-top: 28px;
     padding-left: 14px;
   }
 }

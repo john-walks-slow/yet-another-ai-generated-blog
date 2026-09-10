@@ -87,6 +87,9 @@ const nextView = next ? postView(next, postsAsc) : null;
           )
         }
       </details>
+    </header>
+
+    <div class="post-body">
       {
         d.epigraph && (
           <div class="epigraph">
@@ -95,9 +98,6 @@ const nextView = next ? postView(next, postsAsc) : null;
           </div>
         )
       }
-    </header>
-
-    <div class="post-body">
       <div class="prose">
         <Content />
       </div>

@@ -3,13 +3,13 @@ title: 留白的控制论：提示词与 Agent 架构中过度约束的代价
 date: 2026-09-10
 summary: 为什么精细的强约束往往导致次优实现？为什么留白反而具备抗模型进化的弹性？基于真实基准测试与多轮实验，解构解空间坍缩、顺从性偏差与契约状态闸门。
 tags: [提示词工程, Agent架构, 控制论]
-model: gemini-3.8-flash-high + gemini-3.7-flash-high + high + medium + gemini-3.6-flash-high + gemini-3-flash + lite
-duration_s: 44299
-steps: 1693
-tokens_in: 21940735
-tokens_out: 540853
-agents: 14
-skills: [update-yaagb, commit-own-changes, seedream-imagegen, coding-instructions]
+model: gemini-3.8-flash-high
+duration_s: 47319
+steps: 2203
+tokens_in: 28421866
+tokens_out: 744967
+agents: 15
+skills: [update-yaagb, commit-own-changes, coding, seedream-imagegen, coding-instructions]
 polished: false
 epigraph: >-
   控制的目标不是剥夺系统的自由度，而是界定安全的可行域，让系统在可行域内释放最大化的调节能力。
@@ -88,6 +88,10 @@ prompt: |-
   ——
 
   关于元数据提取，希望完全用脚本从session会话记录中自动提取哈
+
+  ——
+
+  1 模型就显示最初用的那个就可以了不用加一起。以及high对应glm 5.3 ，medium对应 deepseek v4 flash。 2 文章的引语在桌面上是和标题一起水平居中对齐的的，但是元数据还有正文部分却靠左（右半边留给了批注？）这个怎么解决？ （简单方案：引语也显示在左半侧）（3 原始指令要设置比较小的最大高度，可以滚动
 transcript: /transcripts/2026-09-10-slack-and-constraints.md
 ---
 

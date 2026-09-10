@@ -13,8 +13,8 @@ prompt 字段 = 根会话中用户发过的所有消息（用户的 co-author �
     'dsh just restarted*'（重启后自动续跑）、裸 'continue'（恢复机制）
   - 并入 ask_user_question 的问答选择（用户的显式决策，问→答配对）
 
-model 字段 = 会话树全部 request/header 出现过的模型（按请求数降序，
-' + ' 连接）——多模型/跨代路由的会话如实呈现。
+model 字段 = 根会话最初使用的模型（tier 别名经 MODEL_ALIASES 映射为
+真实模型名；会话树全部模型留在终端 debug 输出）。
 
 Usage:
   python3 scripts/gen-meta.py [--session <id>] [--cwd <dir>] [--write <article.md>]
@@ -118,10 +118,17 @@ def _is_human_message(text):
 
 _SKILL_CONTENT_RE = re.compile(r'<skill_content name="([^"]+)">')
 
+# 网关 tier 别名 → 真实模型名（站长口述，2026-09-10；lite 暂无映射）
+MODEL_ALIASES = {
+    'high': 'glm 5.3',
+    'medium': 'deepseek v4 flash',
+}
+
 
 def extract(events, is_root=False):
     """从单个会话的事件流提取指标与用户消息。"""
     models = collections.Counter()
+    first_model = None
     tok_in = tok_out = 0
     steps = 0
     skills = []
@@ -138,6 +145,8 @@ def extract(events, is_root=False):
             mdl = cfg.get('model', '')
             if mdl:
                 models[mdl] += 1
+                if first_model is None:
+                    first_model = mdl
 
         elif t == 'assistant/chunk':
             chunk = d.get('chunk', {})
@@ -217,6 +226,7 @@ def extract(events, is_root=False):
 
     return {
         'models': models,
+        'first_model': first_model,
         'tokens_in': tok_in,
         'tokens_out': tok_out,
         'steps': steps,
@@ -355,10 +365,11 @@ def main():
     # prompt = 根会话全部用户消息（含问答决策），时间序，'——' 分隔
     prompt = '\n\n——\n\n'.join(text for _, text in root['human_msgs'])
 
-    model_str = ' + '.join(m for m, _ in models.most_common())
+    first_model = root.get('first_model') or 'unknown'
+    model_str = MODEL_ALIASES.get(first_model, first_model)
 
     meta = {
-        'model': model_str or 'unknown',
+        'model': model_str,
         'duration_s': root['duration_s'],
         'steps': steps,
         'tokens_in': tok_in,
@@ -372,13 +383,14 @@ def main():
         patched = patch_frontmatter(args.write, meta)
         joined = ', '.join(patched)
         print(f'# patched {args.write}: {joined}')
-        print(f'#   user messages: {len(root["human_msgs"])}, models: {model_str}')
+        print(f'#   user messages: {len(root["human_msgs"])}, model: {model_str}')
         return
 
     print(f'# root: {root_id} ({len(root_events)} events)')
     print(f'# descendants: {len(children)} subagent sessions')
     print(f'# session dir: {session_dir}')
     print(f'# user messages: {len(root["human_msgs"])}')
+    print('# all models: ' + ', '.join(f'{m} ×{c}' for m, c in models.most_common()))
     for k in ('model', 'duration_s', 'steps', 'tokens_in', 'tokens_out', 'agents'):
         print(f'{k}: {meta[k]!r}')
     print('skills:')
