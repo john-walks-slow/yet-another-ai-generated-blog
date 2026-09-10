@@ -7,7 +7,7 @@ import type { Root, Element, ElementContent, Text } from 'hast';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
-const katex = require('/root/.dsh/profiles/web/node_modules/katex');
+const katex = require('katex');
 
 // 匹配 $$...$$ (块级) 和 $...$ (行内，避免匹配转义 \$)
 const MATH_BLOCK_RE = /\$\$([\s\S]+?)\$\$/;
