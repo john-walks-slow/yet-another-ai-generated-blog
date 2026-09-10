@@ -87,6 +87,14 @@ const nextView = next ? postView(next, postsAsc) : null;
           )
         }
       </details>
+      {
+        d.epigraph && (
+          <div class="epigraph">
+            <p class="epigraph-text">{d.epigraph}</p>
+            {d.epigraph_src && <p class="epigraph-src">—— {d.epigraph_src}</p>}
+          </div>
+        )
+      }
     </header>
 
     <div class="post-body">

@@ -544,12 +544,38 @@ mark.pen {
   font-size: 12px;
   line-height: 1.8;
   color: var(--ink-2);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 .gen-prompt .ph {
   color: var(--ink-3);
   display: block;
   margin-bottom: 6px;
   letter-spacing: 0.12em;
+}
+/* 头部引言 —— GEN 记录与正文之间，与正文列对齐 */
+.epigraph {
+  max-width: var(--col-prose);
+  margin: 40px auto 0;
+  padding-left: 18px;
+  border-left: 2px solid var(--line-strong);
+}
+.epigraph .epigraph-text {
+  font-size: 14px;
+  line-height: 1.9;
+  color: var(--ink-2);
+}
+.epigraph .epigraph-src {
+  margin-top: 8px;
+  font-size: 11.5px;
+  letter-spacing: 0.12em;
+  color: var(--ink-3);
+}
+@media (max-width: 640px) {
+  .epigraph {
+    margin-top: 28px;
+    padding-left: 14px;
+  }
 }
 .gen-links {
   font-size: 12.5px;

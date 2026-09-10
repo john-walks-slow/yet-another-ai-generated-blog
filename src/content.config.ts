@@ -29,6 +29,10 @@ const posts = defineCollection({
     transcript: z.string().optional(),
     /** 原始提示词/选题备注（构建期折叠展示） */
     prompt: z.string().optional(),
+    /** 头部引言（显示在 GEN 记录与正文之间） */
+    epigraph: z.string().optional(),
+    /** 引言出处 */
+    epigraph_src: z.string().optional(),
     draft: z.boolean().default(false),
   }),
   // 允许未来扩展 tags→taxonomy，但 v2 不做分类学
